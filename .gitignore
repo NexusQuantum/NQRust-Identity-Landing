@@ -1,0 +1,33 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Next.js
+.next
+out
+dist
+next-env.d.ts
+.tsbuildinfo
+
+# Environment
+.env
+.env.local
+.env*.local
+
+# Editor / OS
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.log
+
+# Vercel
+.vercel
+
+# Internal pitch / brief documents (not for public repo)
+PITCH_BRIEF.txt
+PARTNER_BRIEF.txt
+
+# Test artifacts
+coverage
+.nyc_output
