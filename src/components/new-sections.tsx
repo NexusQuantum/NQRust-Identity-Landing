@@ -230,19 +230,21 @@ export function UspMobile() {
               <span className="dot" />
               USP #1 · Mobile
             </span>
-            <h2>Your own branded 2FA app.</h2>
+            <h2>NQRust ships its own 2FA app.</h2>
             <p>
-              Stop telling users to install Google Authenticator. Ship a TOTP/HOTP authenticator with your own brand,
-              policies, and UX — fully offline, fully under your control.
+              Most identity vendors push users to Google or Microsoft Authenticator. NQRust comes with{" "}
+              <strong>NQRust Auth</strong> — a first-party, offline-first authenticator built for the same stack as the
+              server. One vendor, one support line, one experience.
             </p>
 
             <div className="usp-bullets">
               {[
-                "Branded with your company logo and colors",
-                "Offline-first — codes generate without internet",
+                "First-party app — built and maintained by NQRust, not a third-party dependency",
+                "Offline-first — TOTP/HOTP codes generate without internet, ever",
                 "AES-256 encrypted local backup",
                 "PIN app lock with biometric unlock",
                 "TOTP / HOTP RFC 6238 & 4226 compliant",
+                "Free APK download, no account required",
               ].map((b) => (
                 <div className="usp-bullet" key={b}>
                   <span className="check">
@@ -256,13 +258,13 @@ export function UspMobile() {
             <div className="usp-comparison">
               <div className="usp-comparison-row head">
                 <div>Aspect</div>
-                <div>Third-party app</div>
+                <div>Third-party authenticator</div>
                 <div>NQRust Auth</div>
               </div>
               {[
-                ["Branding", "Vendor logo", "Yours"],
-                ["Policy control", "None", "Full (PIN, backup)"],
-                ["Server dependency", "Third-party", "None — pure offline"],
+                ["Vendor", "Google / Microsoft / others", "Same stack as your IAM"],
+                ["Support line", "External — not the IAM vendor", "NQRust handles end-to-end"],
+                ["Server dependency", "Some sync to vendor cloud", "None — pure offline"],
               ].map(([label, bad, good]) => (
                 <div className="usp-comparison-row" key={label}>
                   <div>{label}</div>
@@ -587,7 +589,7 @@ export function Comparison() {
     ["Data location", "Foreign servers", "Your servers, in Indonesia"],
     ["TKDN compliance", "—", "100%"],
     ["Airgapped mode", "Not available", "Built-in"],
-    ["Mobile authenticator", "Third-party app", "Yours, branded"],
+    ["Mobile authenticator", "Third-party app", "First-party (NQRust Auth)"],
     ["Portal customization", "Limited / paid tier", "Full custom, included"],
     ["Pricing model", "Per-user-per-month, USD", "Flat annual, IDR"],
     ["Vendor lock-in", "High (proprietary API)", "Low (open standards)"],
