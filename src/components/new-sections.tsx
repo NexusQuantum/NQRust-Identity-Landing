@@ -1,6 +1,7 @@
 "use client";
 
 import { ShortVideo } from "./short-video";
+import { ArchDiagram } from "./arch-diagram";
 import { Check, Download, Key, ShieldCheck, Smartphone, Terminal } from "lucide-react";
 import { IconWhatsApp } from "./icons";
 import { DOWNLOADS, WA_URL } from "@/lib/constants";
@@ -178,7 +179,21 @@ export function Solution() {
           </p>
         </div>
 
-        <ShortVideo src="v1-stack-overview" aspectRatio="16/9" caption="60s · stack overview" />
+        <div
+          style={{
+            position: "relative",
+            aspectRatio: "16/9",
+            width: "100%",
+            borderRadius: "var(--radius-lg)",
+            overflow: "hidden",
+            border: "1px solid var(--color-border)",
+            background: "var(--color-surface)",
+            boxShadow: "var(--shadow-md)",
+            padding: 24,
+          }}
+        >
+          <ArchDiagram />
+        </div>
 
         <div
           style={{

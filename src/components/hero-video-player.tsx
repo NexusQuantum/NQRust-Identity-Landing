@@ -2,16 +2,19 @@
 
 import { useEffect, useRef } from "react";
 import { VIDEOS_AVAILABLE } from "@/lib/constants";
+import { ArchDiagram } from "./arch-diagram";
 
 export interface Track {
   id: string;
   label: string;
   /** Aspect handling: vertical videos get letterboxed inside the 16:9 frame */
   vertical?: boolean;
+  /** If set, renders this live component instead of a video element */
+  liveComponent?: React.ReactNode;
 }
 
 export const TRACKS: Track[] = [
-  { id: "v1-stack-overview", label: "Stack Overview" },
+  { id: "v1-stack-overview", label: "Stack Overview", liveComponent: <ArchDiagram /> },
   { id: "v2-mobile-auth", label: "Mobile Auth", vertical: true },
   { id: "v3-portal-tour", label: "Portal Tour" },
   { id: "v4-airgapped-install", label: "Airgapped Install" },
@@ -50,6 +53,13 @@ export function HeroVideoPlayer({
     return () => v.removeEventListener("loadedmetadata", tryPlay);
   }, [activeIdx]);
 
+  // Live components have no video end event — advance after fixed dwell time in auto mode.
+  useEffect(() => {
+    if (!active.liveComponent || !autoNext) return;
+    const id = setTimeout(onEnded, 8000);
+    return () => clearTimeout(id);
+  }, [activeIdx, autoNext, active.liveComponent, onEnded]);
+
   return (
     <div className="hv-body">
       <div
@@ -61,7 +71,11 @@ export function HeroVideoPlayer({
           overflow: "hidden",
         }}
       >
-        {isAvailable ? (
+        {active.liveComponent ? (
+          <div style={{ position: "absolute", inset: 0, padding: 24 }}>
+            {active.liveComponent}
+          </div>
+        ) : isAvailable ? (
           <video
             key={active.id}
             ref={videoRef}

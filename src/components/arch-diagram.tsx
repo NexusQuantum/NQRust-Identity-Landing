@@ -1,5 +1,5 @@
-type NodeKind = "edge" | "infra" | "app" | "core" | "tool";
-type NodeIconName = "user" | "mobile" | "shield" | "server" | "db" | "terminal" | "route";
+type NodeKind = "edge" | "app" | "core" | "tool" | "client";
+type NodeIconName = "user" | "mobile" | "shield" | "server" | "terminal" | "layers";
 
 interface NodeDef {
   x: number;
@@ -10,13 +10,14 @@ interface NodeDef {
 }
 
 const NODES: Record<string, NodeDef> = {
-  user: { x: 90, y: 260, label: "User", sub: "Browser / Device", kind: "edge" },
-  mobile: { x: 90, y: 420, label: "NQRust Auth", sub: "Mobile · TOTP/HOTP", kind: "edge" },
-  traefik: { x: 320, y: 100, label: "Traefik", sub: "Reverse Proxy · TLS", kind: "infra" },
-  portal: { x: 320, y: 260, label: "Identity Portal", sub: "Next.js · OIDC client", kind: "app" },
-  server: { x: 580, y: 260, label: "Identity Server", sub: "OIDC · OAuth2 · SAML", kind: "core" },
-  db: { x: 580, y: 440, label: "PostgreSQL", sub: "Users · Sessions · Audit", kind: "infra" },
-  installer: { x: 730, y: 80, label: "NQRust Installer", sub: "TUI · Docker Compose", kind: "tool" },
+  user:      { x: 100, y: 240, label: "User",            sub: "Browser / Device",      kind: "edge" },
+  mobile:    { x: 100, y: 420, label: "NQRust Auth",      sub: "MFA · TOTP / HOTP",     kind: "edge" },
+  app1:      { x: 340, y: 110, label: "Your App",         sub: "Web · API · Service",   kind: "client" },
+  app2:      { x: 340, y: 250, label: "Your App",         sub: "Web · API · Service",   kind: "client" },
+  app3:      { x: 340, y: 390, label: "Your App",         sub: "Web · API · Service",   kind: "client" },
+  portal:    { x: 560, y: 390, label: "Identity Portal",  sub: "Next.js · OIDC client", kind: "app" },
+  server:    { x: 790, y: 230, label: "Identity Server",  sub: "OIDC · OAuth2 · SAML",  kind: "core" },
+  installer: { x: 930, y: 80,  label: "NQRust Installer", sub: "TUI · Docker Compose",  kind: "tool" },
 };
 
 interface EdgeProps {
@@ -129,14 +130,6 @@ function NodeIcon({ name, highlight }: { name: NodeIconName; highlight?: boolean
           <path d="M5 6h.01M5 14h.01" />
         </>,
       );
-    case "db":
-      return wrap(
-        <>
-          <ellipse cx="10" cy="4.5" rx="7" ry="2.5" />
-          <path d="M3 4.5v5c0 1.4 3 2.5 7 2.5s7-1.1 7-2.5v-5" />
-          <path d="M3 9.5v5c0 1.4 3 2.5 7 2.5s7-1.1 7-2.5v-5" />
-        </>,
-      );
     case "terminal":
       return wrap(
         <>
@@ -145,12 +138,11 @@ function NodeIcon({ name, highlight }: { name: NodeIconName; highlight?: boolean
           <rect x="2" y="3" width="16" height="14" rx="1.5" />
         </>,
       );
-    case "route":
+    case "layers":
       return wrap(
         <>
-          <circle cx="5" cy="15" r="1.8" />
-          <circle cx="15" cy="5" r="1.8" />
-          <path d="M6.5 14h6.5a3.5 3.5 0 0 0 0-7h-6.5a3.5 3.5 0 0 1 0-7" />
+          <path d="M2 9l8-5 8 5-8 5-8-5Z" />
+          <path d="M2 14l8 5 8-5" />
         </>,
       );
   }
@@ -163,12 +155,15 @@ function Node({
   sub,
   icon,
   highlight = false,
-}: NodeDef & { icon: NodeIconName; highlight?: boolean }) {
-  const W = 170;
+  muted = false,
+}: NodeDef & { icon: NodeIconName; highlight?: boolean; muted?: boolean }) {
+  const W = 185;
   const H = 60;
-  const fill = "#FFFFFF";
-  const stroke = highlight ? "#FF6B1A" : "#D4D4D8";
+  const fill = muted ? "#FAFAFA" : "#FFFFFF";
+  const stroke = highlight ? "#FF6B1A" : muted ? "#D4D4D8" : "#D4D4D8";
   const strokeW = highlight ? 1.8 : 1;
+  const labelColor = muted ? "#6B6B76" : "#0B0B0F";
+  const subColor = muted ? "#9A9AA8" : "#6B6B76";
   return (
     <g transform={`translate(${x - W / 2}, ${y - H / 2})`}>
       {highlight && (
@@ -193,15 +188,16 @@ function Node({
         fill={fill}
         stroke={stroke}
         strokeWidth={strokeW}
+        strokeDasharray={muted ? "4 3" : undefined}
         filter="drop-shadow(0 1px 2px rgba(11,11,15,0.06))"
       />
       <g transform="translate(12, 14)">
         <NodeIcon name={icon} highlight={highlight} />
       </g>
-      <text x="50" y="26" fontFamily="Inter, sans-serif" fontSize="12.5" fontWeight="600" fill="#0B0B0F">
+      <text x="50" y="26" fontFamily="Inter, sans-serif" fontSize="12.5" fontWeight="600" fill={labelColor}>
         {label}
       </text>
-      <text x="50" y="42" fontFamily="JetBrains Mono, monospace" fontSize="10" fill="#6B6B76">
+      <text x="50" y="42" fontFamily="JetBrains Mono, monospace" fontSize="10" fill={subColor}>
         {sub}
       </text>
     </g>
@@ -215,7 +211,7 @@ export function ArchDiagram({ animate = true }: { animate?: boolean }) {
 
   return (
     <svg
-      viewBox="0 0 880 540"
+      viewBox="-20 -10 1120 520"
       width="100%"
       height="100%"
       preserveAspectRatio="xMidYMid meet"
@@ -228,18 +224,39 @@ export function ArchDiagram({ animate = true }: { animate?: boolean }) {
         <marker id="arrGray" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0 0 L10 5 L0 10 z" fill="#9A9AA8" />
         </marker>
+        <marker id="arrBlue" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <path d="M0 0 L10 5 L0 10 z" fill="#2563EB" />
+        </marker>
         <linearGradient id="airgapGrad" x1="0" y1="0" x2="1" y2="0">
           <stop offset="0%" stopColor="#FF6B1A" stopOpacity="0" />
-          <stop offset="50%" stopColor="#FF6B1A" stopOpacity="0.25" />
+          <stop offset="50%" stopColor="#FF6B1A" stopOpacity="0.2" />
           <stop offset="100%" stopColor="#FF6B1A" stopOpacity="0" />
         </linearGradient>
       </defs>
 
+      {/* Your Apps zone */}
       <rect
-        x="240"
-        y="40"
-        width="600"
-        height="470"
+        x="233"
+        y="55"
+        width="214"
+        height="390"
+        rx="10"
+        fill="none"
+        stroke="#2563EB"
+        strokeOpacity="0.25"
+        strokeDasharray="3 5"
+        strokeWidth="1.2"
+      />
+      <text x="248" y="76" fontFamily="JetBrains Mono, monospace" fontSize="10" fill="#2563EB" fillOpacity="0.6" letterSpacing="0.04em">
+        YOUR APPS
+      </text>
+
+      {/* Self-hosted zone */}
+      <rect
+        x="460"
+        y="20"
+        width="578"
+        height="450"
         rx="14"
         fill="url(#airgapGrad)"
         stroke="#FF6B1A"
@@ -247,27 +264,41 @@ export function ArchDiagram({ animate = true }: { animate?: boolean }) {
         strokeDasharray="2 6"
         strokeWidth="1.5"
       />
-      <text x="260" y="64" fontFamily="JetBrains Mono, monospace" fontSize="11" fill="#C84A0A" letterSpacing="0.05em">
+      <text x="478" y="44" fontFamily="JetBrains Mono, monospace" fontSize="11" fill="#C84A0A" letterSpacing="0.05em">
         SELF-HOSTED · AIRGAPPED ZONE
       </text>
 
-      <Edge from={N.user} to={N.portal} className={flow} color="#FF6B1A" markerEnd="url(#arr)" label="HTTPS" labelOffset={-12} />
-      <Edge from={N.portal} to={N.server} className={flow} color="#FF6B1A" markerEnd="url(#arr)" label="OIDC" labelOffset={-12} />
-      <Edge from={N.mobile} to={N.server} className={flowFast} color="#2563EB" markerEnd="url(#arrGray)" label="TOTP / HOTP" labelOffset={14} curve={-40} />
-      <Edge from={N.user} to={N.mobile} color="#9A9AA8" dashed label="enroll" />
-      <Edge from={N.server} to={N.db} className={flow} color="#FF6B1A" markerEnd="url(#arr)" />
-      <Edge from={N.traefik} to={N.portal} className={flow} color="#FF6B1A" markerEnd="url(#arr)" />
-      <Edge from={N.traefik} to={N.server} className={flow} color="#FF6B1A" markerEnd="url(#arr)" curve={-30} />
-      <Edge from={N.installer} to={N.traefik} color="#9A9AA8" dashed label="deploy" />
-      <Edge from={N.installer} to={N.server} color="#9A9AA8" dashed />
-      <Edge from={N.installer} to={N.db} color="#9A9AA8" dashed />
+      {/* User → Your Apps */}
+      <Edge from={N.user} to={N.app1} color="#9A9AA8" markerEnd="url(#arrGray)" curve={-20} />
+      <Edge from={N.user} to={N.app2} color="#9A9AA8" markerEnd="url(#arrGray)" />
+      <Edge from={N.user} to={N.app3} color="#9A9AA8" markerEnd="url(#arrGray)" curve={20} />
 
-      <Node {...N.user} icon="user" />
-      <Node {...N.mobile} icon="mobile" />
-      <Node {...N.traefik} icon="route" />
-      <Node {...N.portal} icon="server" />
-      <Node {...N.server} icon="shield" highlight />
-      <Node {...N.db} icon="db" />
+      {/* Your Apps → Identity Server */}
+      <Edge from={N.app1} to={N.server} className={flow} color="#FF6B1A" markerEnd="url(#arr)" label="OIDC" labelOffset={-12} curve={-20} />
+      <Edge from={N.app2} to={N.server} className={flow} color="#FF6B1A" markerEnd="url(#arr)" label="OIDC" labelOffset={-12} />
+      <Edge from={N.app3} to={N.portal} className={flow} color="#FF6B1A" markerEnd="url(#arr)" label="OIDC" labelOffset={-12} />
+
+      {/* Identity Portal → Identity Server */}
+      <Edge from={N.portal} to={N.server} className={flow} color="#FF6B1A" markerEnd="url(#arr)" curve={-40} />
+
+      {/* NQRust Auth → Identity Server */}
+      <Edge from={N.mobile} to={N.server} className={flowFast} color="#2563EB" markerEnd="url(#arrBlue)" label="TOTP / HOTP" labelOffset={14} curve={-50} />
+
+      {/* User → Mobile (enroll) */}
+      <Edge from={N.user} to={N.mobile} color="#9A9AA8" dashed label="enroll" />
+
+      {/* Installer → stack (deploy) */}
+      <Edge from={N.installer} to={N.server} color="#9A9AA8" dashed label="deploy" labelOffset={-12} />
+      <Edge from={N.installer} to={N.portal} color="#9A9AA8" dashed />
+
+      {/* Nodes */}
+      <Node {...N.user}      icon="user"     />
+      <Node {...N.mobile}    icon="mobile"   />
+      <Node {...N.app1}      icon="layers"   muted />
+      <Node {...N.app2}      icon="layers"   muted />
+      <Node {...N.app3}      icon="layers"   muted />
+      <Node {...N.portal}    icon="server"   />
+      <Node {...N.server}    icon="shield"   highlight />
       <Node {...N.installer} icon="terminal" />
 
       {animate && (
