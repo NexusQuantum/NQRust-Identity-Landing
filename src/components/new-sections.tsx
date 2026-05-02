@@ -1,15 +1,8 @@
 "use client";
 
 import { ShortVideo } from "./short-video";
-import {
-  IconCheck,
-  IconDownload,
-  IconKey,
-  IconShield,
-  IconSmartphone,
-  IconTerminal,
-  IconWhatsApp,
-} from "./icons";
+import { Check, Download, Key, ShieldCheck, Smartphone, Terminal } from "lucide-react";
+import { IconWhatsApp } from "./icons";
 import { DOWNLOADS, WA_URL } from "@/lib/constants";
 
 /* ───────────────────────────────────────────
@@ -46,7 +39,16 @@ export function Problem() {
       title: "Data sent abroad",
       body: "Cloud IAM vendors store sensitive identity data in foreign jurisdictions.",
       icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <circle cx="12" cy="12" r="10" />
           <path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20" />
         </svg>
@@ -56,7 +58,16 @@ export function Problem() {
       title: "Per-user pricing in USD",
       body: "Bills balloon with team growth. FX swings make budgets unpredictable.",
       icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
         </svg>
       ),
@@ -65,7 +76,16 @@ export function Problem() {
       title: "Internet-dependent",
       body: "Cloud-only services don't fit airgapped, intelligence, or critical-infra setups.",
       icon: (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           <path d="M5 12.55a11 11 0 0 1 14.08 0M1.42 9a16 16 0 0 1 21.16 0M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01M2 2l20 20" />
         </svg>
       ),
@@ -73,26 +93,29 @@ export function Problem() {
     {
       title: "Third-party authenticators",
       body: "Users install Google or Microsoft Authenticator — no branding, no policy control.",
-      icon: <IconSmartphone size={18} stroke={2} />,
+      icon: <Smartphone size={18} strokeWidth={2} />,
     },
     {
       title: "Self-hosted is hard",
       body: "Other open-source IAMs need months of specialist work to deploy and maintain.",
-      icon: <IconTerminal size={18} stroke={2} />,
+      icon: <Terminal size={18} strokeWidth={2} />,
     },
   ];
   return (
     <section className="section-pad" id="problem">
       <div className="container-x">
-        <div className="section-head">
+        <div className="section-head" data-reveal="">
           <span className="eyebrow">
             <span className="dot" />
             Why this exists
           </span>
           <h2>Identity management today is broken.</h2>
-          <p>Enterprise IT teams deal with the same five problems. NQRust Identity is built to solve all of them.</p>
+          <p>
+            Enterprise IT teams deal with the same five problems. NQRust Identity is built to solve
+            all of them.
+          </p>
         </div>
-        <div className="problem-grid">
+        <div className="problem-grid reveal-group" data-reveal="">
           {items.map((it) => (
             <div className="problem-card" key={it.title}>
               <div className="problem-icon">{it.icon}</div>
@@ -112,22 +135,22 @@ export function Problem() {
 export function Solution() {
   const cards = [
     {
-      icon: <IconKey size={20} />,
+      icon: <Key size={20} />,
       title: "Identity Server",
       sub: "OIDC · OAuth2 · SAML",
     },
     {
-      icon: <IconShield size={20} />,
+      icon: <ShieldCheck size={20} />,
       title: "Identity Portal",
       sub: "Branded admin & user UX",
     },
     {
-      icon: <IconSmartphone size={20} />,
+      icon: <Smartphone size={20} />,
       title: "NQRust Auth",
       sub: "Mobile authenticator",
     },
     {
-      icon: <IconTerminal size={20} />,
+      icon: <Terminal size={20} />,
       title: "Installer",
       sub: "TUI · airgapped-ready",
     },
@@ -143,24 +166,19 @@ export function Solution() {
       }}
     >
       <div className="container-x">
-        <div className="section-head">
+        <div className="section-head" data-reveal="">
           <span className="eyebrow">
             <span className="dot" />
             Solution
           </span>
           <h2>One stack. Four components. One installer.</h2>
           <p>
-            NQRust Identity isn't just an SSO server. You get a complete identity ecosystem — server, portal, mobile
-            authenticator, and installer — all built to work together.
+            NQRust Identity isn't just an SSO server. You get a complete identity ecosystem —
+            server, portal, mobile authenticator, and installer — all built to work together.
           </p>
         </div>
 
-        <ShortVideo
-          src="v1-stack-overview"
-          aspectRatio="16/9"
-          caption="60s · stack overview"
-
-        />
+        <ShortVideo src="v1-stack-overview" aspectRatio="16/9" caption="60s · stack overview" />
 
         <div
           style={{
@@ -169,7 +187,7 @@ export function Solution() {
             gridTemplateColumns: "repeat(4, 1fr)",
             gap: 16,
           }}
-          className="solution-cards"
+          className="solution-cards reveal-group" data-reveal=""
         >
           {cards.map((c) => (
             <div
@@ -225,16 +243,16 @@ export function UspMobile() {
     <section className="section-pad" id="usp-mobile">
       <div className="container-x">
         <div className="usp">
-          <div className="usp-text">
+          <div className="usp-text" data-reveal="">
             <span className="eyebrow">
               <span className="dot" />
               USP #1 · Mobile
             </span>
             <h2>NQRust ships its own 2FA app.</h2>
             <p>
-              Most identity vendors push users to Google or Microsoft Authenticator. NQRust comes with{" "}
-              <strong>NQRust Auth</strong> — a first-party, offline-first authenticator built for the same stack as the
-              server. One vendor, one support line, one experience.
+              Most identity vendors push users to Google or Microsoft Authenticator. NQRust comes
+              with <strong>NQRust Auth</strong> — a first-party, offline-first authenticator built
+              for the same stack as the server. One vendor, one support line, one experience.
             </p>
 
             <div className="usp-bullets">
@@ -248,7 +266,7 @@ export function UspMobile() {
               ].map((b) => (
                 <div className="usp-bullet" key={b}>
                   <span className="check">
-                    <IconCheck size={12} stroke={3} />
+                    <Check size={12} strokeWidth={3} />
                   </span>
                   <span>{b}</span>
                 </div>
@@ -312,22 +330,19 @@ export function UspPortal() {
               <div className="dotc" />
               <span className="label">portal.your-company.com</span>
             </div>
-            <ShortVideo
-              src="v3-portal-tour"
-              aspectRatio="1280/720"
-              objectFit="cover"
-            />
+            <ShortVideo src="v3-portal-tour" aspectRatio="1280/720" objectFit="cover" />
           </div>
 
-          <div className="usp-text">
+          <div className="usp-text" data-reveal="">
             <span className="eyebrow">
               <span className="dot" />
               USP #2 · Portal
             </span>
             <h2>A portal that feels like your own product.</h2>
             <p>
-              Not a generic login page. Not the default vendor admin UI. NQRust Identity Portal is a modern web app
-              you can fully white-label, built on Next.js 16 + React 19 — UX on par with top-tier enterprise SaaS.
+              Not a generic login page. Not the default vendor admin UI. NQRust Identity Portal is a
+              modern web app you can fully white-label, built on Next.js 16 + React 19 — UX on par
+              with top-tier enterprise SaaS.
             </p>
 
             <div className="usp-bullets">
@@ -340,7 +355,7 @@ export function UspPortal() {
               ].map((b) => (
                 <div className="usp-bullet" key={b}>
                   <span className="check">
-                    <IconCheck size={12} stroke={3} />
+                    <Check size={12} strokeWidth={3} />
                   </span>
                   <span>{b}</span>
                 </div>
@@ -361,15 +376,15 @@ export function UspAirgapped() {
     <section className="section-pad" id="usp-airgapped">
       <div className="container-x">
         <div className="usp">
-          <div className="usp-text">
+          <div className="usp-text" data-reveal="">
             <span className="eyebrow">
               <span className="dot" />
               USP #3 · Self-Hosted
             </span>
             <h2>Your data. Your servers. Your control.</h2>
             <p>
-              Identity data is too sensitive to delegate. NQRust deploys 100% on-premise and supports fully airgapped
-              installs for the most sensitive environments.
+              Identity data is too sensitive to delegate. NQRust deploys 100% on-premise and
+              supports fully airgapped installs for the most sensitive environments.
             </p>
 
             <div className="usp-bullets">
@@ -381,7 +396,7 @@ export function UspAirgapped() {
               ].map((b) => (
                 <div className="usp-bullet" key={b}>
                   <span className="check">
-                    <IconCheck size={12} stroke={3} />
+                    <Check size={12} strokeWidth={3} />
                   </span>
                   <span>{b}</span>
                 </div>
@@ -396,11 +411,7 @@ export function UspAirgapped() {
               <div className="dotc" />
               <span className="label">nqrust-installer · zsh</span>
             </div>
-            <ShortVideo
-              src="v4-airgapped-install"
-              aspectRatio="1280/720"
-              objectFit="cover"
-            />
+            <ShortVideo src="v4-airgapped-install" aspectRatio="1280/720" objectFit="cover" />
           </div>
         </div>
       </div>
@@ -424,15 +435,15 @@ export function UspIndonesia() {
     >
       <div className="container-x">
         <div className="usp">
-          <div className="usp-text">
+          <div className="usp-text" data-reveal="">
             <span className="eyebrow">
               <span className="dot" />
               USP #4 · 🇮🇩 Local
             </span>
             <h2>Made in Indonesia. 100% TKDN.</h2>
             <p>
-              Built by an Indonesian engineering team. Fully TKDN-compliant, ready for government and SOE procurement,
-              and aligned with national data sovereignty policy.
+              Built by an Indonesian engineering team. Fully TKDN-compliant, ready for government
+              and SOE procurement, and aligned with national data sovereignty policy.
             </p>
 
             <div className="usp-bullets">
@@ -445,7 +456,7 @@ export function UspIndonesia() {
               ].map((b) => (
                 <div className="usp-bullet" key={b}>
                   <span className="check">
-                    <IconCheck size={12} stroke={3} />
+                    <Check size={12} strokeWidth={3} />
                   </span>
                   <span>{b}</span>
                 </div>
@@ -550,16 +561,19 @@ export function SecurityOverview() {
   return (
     <section className="section-pad" id="security">
       <div className="container-x">
-        <div className="section-head">
+        <div className="section-head" data-reveal="">
           <span className="eyebrow">
             <span className="dot" />
             Security
           </span>
           <h2>Defense in depth, by default.</h2>
-          <p>Strong security with no extra configuration. Standards: OIDC, OAuth2, SAML 2.0, RFC 6238, RFC 4226.</p>
+          <p>
+            Strong security with no extra configuration. Standards: OIDC, OAuth2, SAML 2.0, RFC
+            6238, RFC 4226.
+          </p>
         </div>
 
-        <div className="security-grid">
+        <div className="security-grid reveal-group" data-reveal="">
           {cols.map((c) => (
             <div className="security-col" key={c.title}>
               <h3>{c.title}</h3>
@@ -567,7 +581,7 @@ export function SecurityOverview() {
                 {c.items.map((it) => (
                   <div className="security-item" key={it}>
                     <span className="ico">
-                      <IconCheck size={14} stroke={3} />
+                      <Check size={14} strokeWidth={3} />
                     </span>
                     <span>{it}</span>
                   </div>
@@ -607,13 +621,16 @@ export function Comparison() {
       }}
     >
       <div className="container-x">
-        <div className="section-head">
+        <div className="section-head" data-reveal="">
           <span className="eyebrow">
             <span className="dot" />
             Comparison
           </span>
           <h2>NQRust vs cloud IAM.</h2>
-          <p>How NQRust Identity stacks up against international cloud IAM platforms on what matters to local teams.</p>
+          <p>
+            How NQRust Identity stacks up against international cloud IAM platforms on what matters
+            to local teams.
+          </p>
         </div>
 
         <div className="compare-table">
@@ -674,13 +691,16 @@ export function UseCases() {
   return (
     <section className="section-pad" id="use-cases">
       <div className="container-x">
-        <div className="section-head">
+        <div className="section-head" data-reveal="">
           <span className="eyebrow">
             <span className="dot" />
             Use cases
           </span>
           <h2>Built for sectors that take identity seriously.</h2>
-          <p>From government to OT — NQRust adapts to environments where control and compliance are non-negotiable.</p>
+          <p>
+            From government to OT — NQRust adapts to environments where control and compliance are
+            non-negotiable.
+          </p>
         </div>
 
         <div className="usecases-grid">
@@ -713,16 +733,19 @@ export function FinalCta() {
       }}
     >
       <div className="container-x">
-        <div className="section-head" style={{ textAlign: "center", margin: "0 auto 0" }}>
+        <div className="section-head" data-reveal="" style={{ textAlign: "center", margin: "0 auto 0" }}>
           <span className="eyebrow" style={{ justifyContent: "center" }}>
             <span className="dot" />
             Get started
           </span>
           <h2>Start today.</h2>
-          <p>Free 1-year trial license. No credit card required. License key activated during install.</p>
+          <p>
+            Free 1-year trial license. No credit card required. License key activated during
+            install.
+          </p>
         </div>
 
-        <div className="final-cta-grid">
+        <div className="final-cta-grid reveal-group" data-reveal="">
           <div className="final-cta-card primary">
             <div
               style={{
@@ -736,20 +759,25 @@ export function FinalCta() {
                 justifyContent: "center",
               }}
             >
-              <IconTerminal size={26} stroke={1.8} />
+              <Terminal size={26} strokeWidth={1.8} />
             </div>
             <h3>Download NQRust Installer</h3>
             <p>
-              Linux x86_64 / arm64. Online & airgapped modes. Full stack (Identity, Portal, DB, Traefik) deployed in
-              under 15 minutes.
+              Linux x86_64 / arm64. Online & airgapped modes. Full stack (Identity, Portal, DB,
+              Traefik) deployed in under 15 minutes.
             </p>
             <div className="dl-badges">
               <span className="badge badge-orange">Free 1-Year Trial</span>
               <span className="badge badge-gray">~120 MB online · ~3.5 GB airgapped</span>
             </div>
             <div className="actions">
-              <a className="btn btn-primary btn-lg" href={DOWNLOADS.installer.url} target="_blank" rel="noreferrer">
-                <IconDownload size={16} stroke={2} />
+              <a
+                className="btn btn-primary btn-lg"
+                href={DOWNLOADS.installer.url}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Download size={16} strokeWidth={2} />
                 Download Now
               </a>
               <a className="btn btn-secondary" href="#faq">
@@ -776,8 +804,8 @@ export function FinalCta() {
             </div>
             <h3>Contact Sales</h3>
             <p>
-              For live demos, POC engagements, custom licensing, or government/SOE procurement discussions — reach our
-              local team directly.
+              For live demos, POC engagements, custom licensing, or government/SOE procurement
+              discussions — reach our local team directly.
             </p>
             <div
               style={{
@@ -789,7 +817,12 @@ export function FinalCta() {
               +62 851-5512-1460
             </div>
             <div className="actions">
-              <a className="btn btn-secondary btn-lg" href={WA_URL} target="_blank" rel="noreferrer">
+              <a
+                className="btn btn-secondary btn-lg"
+                href={WA_URL}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <IconWhatsApp size={16} stroke={2} />
                 WhatsApp Sales
               </a>

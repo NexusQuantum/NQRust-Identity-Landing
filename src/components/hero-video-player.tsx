@@ -1,26 +1,35 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { VIDEOS_AVAILABLE } from "@/lib/constants";
 
-interface Track {
+export interface Track {
   id: string;
   label: string;
   /** Aspect handling: vertical videos get letterboxed inside the 16:9 frame */
   vertical?: boolean;
 }
 
-const TRACKS: Track[] = [
+export const TRACKS: Track[] = [
   { id: "v1-stack-overview", label: "Stack Overview" },
   { id: "v2-mobile-auth", label: "Mobile Auth", vertical: true },
   { id: "v3-portal-tour", label: "Portal Tour" },
   { id: "v4-airgapped-install", label: "Airgapped Install" },
 ];
 
-export function HeroVideoPlayer() {
-  const [activeIdx, setActiveIdx] = useState(0);
-  /** When user clicks a track, autoNext disables — selected track loops. */
-  const [autoNext, setAutoNext] = useState(true);
+interface HeroVideoPlayerProps {
+  activeIdx: number;
+  autoNext: boolean;
+  onEnded: () => void;
+  onAutoToggle: () => void;
+}
+
+export function HeroVideoPlayer({
+  activeIdx,
+  autoNext,
+  onEnded,
+  onAutoToggle,
+}: HeroVideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   const active = TRACKS[activeIdx];
@@ -41,23 +50,8 @@ export function HeroVideoPlayer() {
     return () => v.removeEventListener("loadedmetadata", tryPlay);
   }, [activeIdx]);
 
-  const handleEnded = () => {
-    if (autoNext) {
-      setActiveIdx((i) => (i + 1) % TRACKS.length);
-    } else if (videoRef.current) {
-      // Manual mode: loop the selected track.
-      videoRef.current.currentTime = 0;
-      void videoRef.current.play();
-    }
-  };
-
-  const handleTrackClick = (idx: number) => {
-    setAutoNext(false);
-    setActiveIdx(idx);
-  };
-
   return (
-    <div className="hv-body" style={{ display: "flex", flexDirection: "column" }}>
+    <div className="hv-body">
       <div
         style={{
           position: "relative",
@@ -74,11 +68,10 @@ export function HeroVideoPlayer() {
             autoPlay
             muted
             playsInline
-            // When autoNext is off we still want native loop on the picked track.
             loop={!autoNext}
             preload="auto"
             poster={`/videos/${active.id}.jpg`}
-            onEnded={handleEnded}
+            onEnded={onEnded}
             style={{
               width: "100%",
               height: "100%",
@@ -93,8 +86,10 @@ export function HeroVideoPlayer() {
           <PlayerPlaceholder label={active.label} />
         )}
 
-        {/* Mode badge — top right */}
+        {/* Mode badge — top right, clickable in Manual mode to resume Auto */}
         <div
+          onClick={!autoNext ? onAutoToggle : undefined}
+          title={!autoNext ? "Click to resume auto-play" : undefined}
           style={{
             position: "absolute",
             top: 12,
@@ -112,6 +107,8 @@ export function HeroVideoPlayer() {
             display: "inline-flex",
             alignItems: "center",
             gap: 6,
+            cursor: !autoNext ? "pointer" : "default",
+            userSelect: "none",
           }}
         >
           {autoNext ? (
@@ -128,88 +125,20 @@ export function HeroVideoPlayer() {
               Auto
             </>
           ) : (
-            "Manual"
+            <>
+              <svg
+                width="8"
+                height="8"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+                style={{ opacity: 0.8 }}
+              >
+                <path d="M13.65 2.35A8 8 0 1 0 15 8h-2a6 6 0 1 1-1.06-3.41L10 7h5V2l-1.35.35z" />
+              </svg>
+              Manual
+            </>
           )}
         </div>
-      </div>
-
-      {/* Track switcher — bottom strip, equal-width grid so it never overflows */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: `repeat(${TRACKS.length}, minmax(0, 1fr))`,
-          gap: 6,
-          padding: "10px 12px",
-          borderTop: "1px solid var(--color-border)",
-          background: "var(--color-surface)",
-        }}
-      >
-        {TRACKS.map((t, i) => {
-          const isActive = i === activeIdx;
-          return (
-            <button
-              key={t.id}
-              type="button"
-              onClick={() => handleTrackClick(i)}
-              title={t.label}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
-                gap: 6,
-                padding: "6px 8px",
-                borderRadius: 8,
-                border: `1px solid ${isActive ? "var(--color-primary)" : "var(--color-border)"}`,
-                background: isActive ? "var(--color-primary-soft)" : "transparent",
-                color: isActive ? "var(--color-primary-strong)" : "var(--color-text-2)",
-                fontFamily: "var(--font-mono), JetBrains Mono, monospace",
-                fontSize: 10.5,
-                fontWeight: 600,
-                letterSpacing: "0.02em",
-                cursor: "pointer",
-                transition: "border-color .15s, background .15s, color .15s",
-                minWidth: 0,
-              }}
-            >
-              <span
-                style={{
-                  flexShrink: 0,
-                  width: 14,
-                  height: 14,
-                  borderRadius: "50%",
-                  background: isActive ? "var(--color-primary)" : "var(--color-surface-2)",
-                  color: isActive ? "white" : "var(--color-text-muted)",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <svg width="7" height="7" viewBox="0 0 8 8" fill="currentColor">
-                  <path d="M2 1v6l5-3-5-3z" />
-                </svg>
-              </span>
-              <span
-                style={{
-                  flexShrink: 0,
-                  fontSize: 9,
-                  color: isActive ? "var(--color-primary)" : "var(--color-text-faint)",
-                }}
-              >
-                0{i + 1}
-              </span>
-              <span
-                style={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  minWidth: 0,
-                }}
-              >
-                {t.label}
-              </span>
-            </button>
-          );
-        })}
       </div>
     </div>
   );
