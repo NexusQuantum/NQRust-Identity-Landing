@@ -8,8 +8,12 @@ export function Nav() {
       <div className="container-x nav-inner">
         <a href="#top" className="nav-brand">
           <Image src="/assets/nqr-logo.png" alt="NQRust" width={56} height={28} priority />
-          <span className="font-semibold">NQRust Identity</span>
+          <span className="nav-brand-text font-semibold">NQRust Identity</span>
         </a>
+        {/* Mobile-only centered brand label */}
+        <span className="nav-brand-mobile font-semibold" aria-hidden="true">
+          NQRust Identity
+        </span>
         <div className="nav-links">
           <a href="#solution">Product</a>
           <a href="#architecture">Architecture</a>
@@ -21,12 +25,21 @@ export function Nav() {
           </a>
         </div>
         <div className="nav-cta">
-          <a className="btn btn-ghost btn-sm" href={WA_URL} target="_blank" rel="noreferrer">
+          <a
+            className="btn btn-ghost btn-sm nav-cta-secondary"
+            href={WA_URL}
+            target="_blank"
+            rel="noreferrer"
+          >
             Contact Sales
           </a>
-          <a className="btn btn-primary btn-sm" href="#get-started">
-            Download
-            <Download size={14} />
+          <a
+            className="btn btn-primary btn-sm nav-cta-download"
+            href="#get-started"
+            aria-label="Download installer"
+          >
+            <Download size={16} />
+            <span className="nav-cta-label">Download</span>
           </a>
         </div>
       </div>

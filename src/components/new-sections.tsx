@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ShortVideo } from "./short-video";
 import { ArchDiagram } from "./arch-diagram";
 import { Check, Download, Key, ShieldCheck, Smartphone, Terminal } from "lucide-react";
@@ -16,7 +17,13 @@ export function TrustBar() {
         <div className="trust-bar-label">Trusted by strategic institutions</div>
         <div className="trust-bar-logos">
           <div className="trust-logo">
-            <div className="logo-mark">BIN</div>
+            <Image
+              src="/assets/bin.png"
+              alt="Badan Intelijen Negara"
+              width={56}
+              height={56}
+              className="trust-logo-img"
+            />
             <div className="trust-logo-text">
               <span className="trust-logo-name">Badan Intelijen Negara</span>
               <span className="trust-logo-sub">Airgapped deployment</span>
@@ -196,13 +203,8 @@ export function Solution() {
         </div>
 
         <div
-          style={{
-            marginTop: 32,
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: 16,
-          }}
-          className="solution-cards reveal-group" data-reveal=""
+          className="solution-cards reveal-group"
+          data-reveal=""
         >
           {cards.map((c) => (
             <div
@@ -479,59 +481,20 @@ export function UspIndonesia() {
             </div>
           </div>
 
-          <div
-            style={{
-              padding: 48,
-              borderRadius: "var(--radius-lg)",
-              border: "1px solid var(--color-border)",
-              background:
-                "radial-gradient(80% 60% at 30% 30%, rgba(255,107,26,0.10), transparent 60%), var(--color-surface)",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 24,
-              minHeight: 400,
-              textAlign: "center",
-            }}
-          >
-            <div
-              style={{
-                fontSize: 80,
-                lineHeight: 1,
-              }}
-            >
-              🇮🇩
-            </div>
-            <div
-              style={{
-                fontFamily: "var(--font-mono), JetBrains Mono, monospace",
-                fontSize: 12,
-                letterSpacing: "0.1em",
-                color: "var(--color-primary-strong)",
-                textTransform: "uppercase",
-              }}
-            >
-              Sertifikat TKDN · 100%
-            </div>
-            <div
-              style={{
-                fontWeight: 700,
-                fontSize: 22,
-                letterSpacing: "-0.01em",
-                maxWidth: 280,
-              }}
-            >
+          <div className="tkdn-card">
+            <div className="tkdn-card-glow" aria-hidden="true" />
+            <Image
+              src="/assets/tkdn.png"
+              alt="Sertifikat TKDN — Tingkat Komponen Dalam Negeri"
+              width={320}
+              height={320}
+              className="tkdn-img"
+            />
+            <div className="tkdn-eyebrow">Sertifikat TKDN · 100%</div>
+            <div className="tkdn-headline">
               Identity you control — not rented from abroad.
             </div>
-            <div
-              style={{
-                display: "flex",
-                gap: 8,
-                flexWrap: "wrap",
-                justifyContent: "center",
-              }}
-            >
+            <div className="tkdn-badges">
               <span className="badge badge-orange">Government-ready</span>
               <span className="badge badge-orange">BUMN-ready</span>
               <span className="badge badge-orange">Local support</span>

@@ -63,13 +63,8 @@ export function HeroVideoPlayer({
   return (
     <div className="hv-body">
       <div
-        style={{
-          position: "relative",
-          width: "100%",
-          aspectRatio: "16 / 10",
-          background: "linear-gradient(180deg, #FAFAFB 0%, #F5F5F7 100%)",
-          overflow: "hidden",
-        }}
+        className="hv-stage"
+        data-vertical={active.vertical ? "true" : "false"}
       >
         {active.liveComponent ? (
           <div style={{ position: "absolute", inset: 0, padding: 24 }}>

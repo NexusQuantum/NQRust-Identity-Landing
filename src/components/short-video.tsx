@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { VIDEOS_AVAILABLE } from "@/lib/constants";
 
 interface ShortVideoProps {
@@ -28,6 +28,22 @@ export function ShortVideo({
 }: ShortVideoProps) {
   const ref = useRef<HTMLVideoElement>(null);
   const isAvailable = VIDEOS_AVAILABLE[src] === true;
+
+  // Some mobile browsers (Safari iOS, Chrome Android with data-saver) skip autoplay
+  // until the source is forced to load. Kick playback explicitly after mount.
+  useEffect(() => {
+    if (!isAvailable || !autoplay) return;
+    const v = ref.current;
+    if (!v) return;
+    const tryPlay = () => {
+      v.play().catch(() => {
+        /* autoplay blocked — poster stays visible, that's fine */
+      });
+    };
+    if (v.readyState >= 2) tryPlay();
+    else v.addEventListener("loadedmetadata", tryPlay, { once: true });
+    return () => v.removeEventListener("loadedmetadata", tryPlay);
+  }, [isAvailable, autoplay, src]);
 
   return (
     <div
