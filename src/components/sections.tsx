@@ -356,7 +356,7 @@ export function Downloads() {
             </div>
             <p className="dl-desc">
               An offline 2FA app for Android. Generates TOTP/HOTP codes with no internet required,
-              with encrypted local backup and biometric unlock.
+              with encrypted local backup and PIN app lock.
             </p>
             <div className="dl-platforms">
               <span>

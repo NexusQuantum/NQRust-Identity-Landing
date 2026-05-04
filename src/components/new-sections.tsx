@@ -277,7 +277,7 @@ export function UspMobile() {
                 "First-party app — built and maintained by NQRust, not a third-party dependency",
                 "Offline-first — TOTP/HOTP codes generate without internet, ever",
                 "AES-256 encrypted local backup",
-                "PIN app lock with biometric unlock",
+                "PIN app lock — secure local storage",
                 "TOTP / HOTP RFC 6238 & 4226 compliant",
                 "Free APK download, no account required",
               ].map((b) => (
