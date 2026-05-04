@@ -1,16 +1,15 @@
 #!/usr/bin/env bash
-# Encode source video into web-optimized AV1 (.webm) + H.264 (.mp4) + poster .jpg
+# Encode source video into web-optimized H.264 MP4 + JPG poster.
+#
+# We use H.264 baseline-profile MP4 only (no WebM/AV1) for maximum mobile
+# compatibility — every Android & iOS browser handles H.264, but AV1 support
+# is still patchy on mobile (Chrome Android < 113, iOS Safari < 17.4).
 #
 # Usage:
 #   ./tools/encode-video.sh <source-file> <output-name> [width]
 #
 # Example:
 #   ./tools/encode-video.sh ~/Downloads/raw-stack.mov v1-stack-overview 1280
-#
-# Outputs to public/videos/:
-#   v1-stack-overview.webm   (AV1, smallest)
-#   v1-stack-overview.mp4    (H.264, fallback)
-#   v1-stack-overview.jpg    (first-frame poster)
 
 set -e
 
@@ -28,29 +27,20 @@ mkdir -p "$OUT_DIR"
 
 echo "→ Encoding $SRC as $NAME (width=$WIDTH)"
 
-# Common scale + strip audio
 SCALE="scale=${WIDTH}:-2:flags=lanczos"
 
-# AV1 (smallest, best quality) — use libsvtav1 (faster than libaom-av1)
-echo "  [1/3] AV1 webm…"
+# H.264 baseline — universal mobile decode
+echo "  [1/2] H.264 mp4…"
 ffmpeg -y -i "$SRC" \
   -vf "$SCALE" \
-  -c:v libsvtav1 -crf 35 -preset 6 -g 60 \
-  -an \
-  -movflags +faststart \
-  "$OUT_DIR/$NAME.webm"
-
-# H.264 fallback (Safari iOS, older browsers)
-echo "  [2/3] H.264 mp4…"
-ffmpeg -y -i "$SRC" \
-  -vf "$SCALE" \
-  -c:v libx264 -crf 24 -preset slow -profile:v main -pix_fmt yuv420p \
+  -c:v libx264 -profile:v baseline -level 3.0 -preset medium -crf 23 \
+  -pix_fmt yuv420p \
   -an \
   -movflags +faststart \
   "$OUT_DIR/$NAME.mp4"
 
-# Poster — first frame
-echo "  [3/3] Poster jpg…"
+# Poster (first frame)
+echo "  [2/2] Poster jpg…"
 ffmpeg -y -i "$SRC" \
   -vf "$SCALE,select=eq(n\\,0)" \
   -q:v 4 \
@@ -60,4 +50,4 @@ ffmpeg -y -i "$SRC" \
 # Report sizes
 echo ""
 echo "Done. File sizes:"
-ls -lh "$OUT_DIR/$NAME".{webm,mp4,jpg} | awk '{print "  " $5 "\t" $9}'
+ls -lh "$OUT_DIR/$NAME".{mp4,jpg} | awk '{print "  " $5 "\t" $9}'

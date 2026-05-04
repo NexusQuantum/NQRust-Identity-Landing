@@ -30,6 +30,8 @@ export function ShortVideo({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const isAvailable = VIDEOS_AVAILABLE[src] === true;
   const [hasError, setHasError] = useState(false);
+  const [autoplayBlocked, setAutoplayBlocked] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     if (!isAvailable || !autoplay) return;
@@ -39,8 +41,13 @@ export function ShortVideo({
     const tryPlay = () => {
       const p = v.play();
       if (p && typeof p.catch === "function") {
-        p.catch(() => {
-          /* autoplay blocked — poster stays visible until user taps */
+        p.then(() => {
+          setAutoplayBlocked(false);
+          setIsPlaying(true);
+        }).catch(() => {
+          // Autoplay blocked — show tap-to-play overlay
+          setAutoplayBlocked(true);
+          setIsPlaying(false);
         });
       }
     };
@@ -49,6 +56,14 @@ export function ShortVideo({
     const onCanPlay = () => tryPlay();
     v.addEventListener("canplay", onCanPlay);
     v.addEventListener("loadeddata", onCanPlay);
+
+    const onPlay = () => {
+      setIsPlaying(true);
+      setAutoplayBlocked(false);
+    };
+    const onPause = () => setIsPlaying(false);
+    v.addEventListener("play", onPlay);
+    v.addEventListener("pause", onPause);
 
     // Force load explicitly — some browsers don't auto-fetch nested videos
     try {
@@ -71,9 +86,19 @@ export function ShortVideo({
     return () => {
       v.removeEventListener("canplay", onCanPlay);
       v.removeEventListener("loadeddata", onCanPlay);
+      v.removeEventListener("play", onPlay);
+      v.removeEventListener("pause", onPause);
       io.disconnect();
     };
   }, [isAvailable, autoplay, src]);
+
+  const handleTapToPlay = () => {
+    const v = ref.current;
+    if (!v) return;
+    void v.play().catch(() => {
+      /* still blocked, ignore */
+    });
+  };
 
   return (
     <div
@@ -112,7 +137,7 @@ export function ShortVideo({
             inset: 0,
           }}
         >
-          <source src={`/videos/${src}.webm`} type="video/webm" />
+          <source src={`/videos/${src}.mp4`} type="video/mp4" />
         </video>
       ) : (
         <VideoPlaceholder />
@@ -135,6 +160,46 @@ export function ShortVideo({
         >
           {caption}
         </div>
+      )}
+      {/* Tap-to-play overlay — appears when autoplay is blocked or video is paused
+          (mobile browsers + battery-saver mode commonly block autoplay) */}
+      {isAvailable && !hasError && (autoplayBlocked || !isPlaying) && (
+        <button
+          type="button"
+          onClick={handleTapToPlay}
+          aria-label="Play video"
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "rgba(11, 11, 15, 0.35)",
+            border: "none",
+            cursor: "pointer",
+            zIndex: 3,
+            transition: "background 0.2s",
+          }}
+        >
+          <span
+            style={{
+              width: 64,
+              height: 64,
+              borderRadius: "50%",
+              background: "var(--color-primary)",
+              color: "white",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow:
+                "0 0 0 6px rgba(255,107,26,0.25), 0 8px 24px -4px rgba(11,11,15,0.4)",
+            }}
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7-11-7Z" />
+            </svg>
+          </span>
+        </button>
       )}
     </div>
   );

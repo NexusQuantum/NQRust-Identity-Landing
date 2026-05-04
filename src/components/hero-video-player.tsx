@@ -89,7 +89,7 @@ export function HeroVideoPlayer({
               background: active.vertical ? "#0B0B0F" : undefined,
             }}
           >
-            <source src={`/videos/${active.id}.webm`} type="video/webm" />
+            <source src={`/videos/${active.id}.mp4`} type="video/mp4" />
           </video>
         ) : (
           <PlayerPlaceholder label={active.label} />

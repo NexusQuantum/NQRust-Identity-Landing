@@ -46,10 +46,10 @@ NQRust-Identity-Landing/
 │   │   ├── nqr-logo.png            Logo used in nav, footer
 │   │   └── tkdn.png                TKDN compliance badge
 │   └── videos/
-│       ├── v1-stack-overview.{webm,jpg}    Solution / overview clip
-│       ├── v2-mobile-auth.{webm,jpg}       Mobile auth, vertical 9:19
-│       ├── v3-portal-tour.{webm,jpg}       Portal walkthrough
-│       ├── v4-airgapped-install.{webm,jpg} Terminal installer demo
+│       ├── v1-stack-overview.{mp4,jpg}    Solution / overview clip
+│       ├── v2-mobile-auth.{mp4,jpg}       Mobile auth, vertical 9:19
+│       ├── v3-portal-tour.{mp4,jpg}       Portal walkthrough
+│       ├── v4-airgapped-install.{mp4,jpg} Terminal installer demo
 │       └── README.md                       How to record / encode new videos
 │
 ├── src/
@@ -72,7 +72,7 @@ NQRust-Identity-Landing/
 │       └── constants.ts            Site URLs, download links, video flags, WhatsApp template
 │
 ├── tools/
-│   ├── encode-video.ps1            Encode raw video → AV1 webm + JPG poster (PowerShell)
+│   ├── encode-video.ps1            Encode raw video → H.264 mp4 + JPG poster (PowerShell)
 │   └── encode-video.sh             Same, for bash / macOS / WSL
 │
 ├── CLAUDE.md                       Coding guidelines (Karpathy)
@@ -124,16 +124,16 @@ Implementation: [`src/components/hero-video-player.tsx`](src/components/hero-vid
 
 ## Video Pipeline
 
-All videos are served as **AV1 in WebM**, no MP4 fallback. Average size after encoding:
+All videos are served as **H.264 baseline-profile MP4** — single format, no WebM/AV1 fallback. Universal mobile compatibility prioritized over file-size optimization (AV1 support is still patchy on mobile: Chrome Android < 113 and iOS Safari < 17.4 can't decode it).
 
-| Track | Source | Final WebM | Reduction |
-|---|---|---|---|
-| V1 Stack Overview | 2.1 MB MP4 | 143 KB | 93% |
-| V2 Mobile Auth | 2.0 MB MP4 | 243 KB | 88% |
-| V3 Portal Tour | 6.9 MB MP4 | 604 KB | 91% |
-| V4 Airgapped Install | 4.6 MB MP4 | 459 KB | 90% |
+| Track | Final MP4 |
+|---|---|
+| V1 Stack Overview | 176 KB |
+| V2 Mobile Auth | 455 KB |
+| V3 Portal Tour | 1.1 MB |
+| V4 Airgapped Install | 559 KB |
 
-**Browser support**: Chrome 70+, Firefox 113+, Safari 16.4+ (iOS 16.4+), Edge 70+. Older Safari falls back to the `poster` JPG.
+**Browser support**: every Android (since 4.0), every iOS (since 6), every desktop browser. Hardware decoded by virtually every mobile chip.
 
 ### Recording new clips
 
@@ -149,7 +149,7 @@ Spec lives in [`public/videos/README.md`](public/videos/README.md). Workflow:
    # bash / WSL / macOS
    ./tools/encode-video.sh /path/raw.mp4 v1-stack-overview
    ```
-3. Output drops in `public/videos/` as `.webm` + `.mp4` + `.jpg` poster.
+3. Output drops in `public/videos/` as `.mp4` + `.jpg` poster.
 4. Flip the matching key in [`src/lib/constants.ts`](src/lib/constants.ts) to `true`:
    ```ts
    export const VIDEOS_AVAILABLE = {
