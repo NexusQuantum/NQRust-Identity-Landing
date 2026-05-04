@@ -33,3 +33,20 @@ export const IconWhatsApp = (p: IconProps) => (
     <path d="M8.5 9.5c.3 1.5 1 2.7 2 3.7s2.2 1.7 3.7 2c.4 0 .8-.1 1.1-.4l.6-.7c.3-.3.7-.4 1-.2l1.4.6c.4.2.6.6.4 1a3 3 0 0 1-2.5 1.7c-1.4 0-3.5-.7-5.4-2.6S8.2 11 8.2 9.6A3 3 0 0 1 9.9 7c.4-.2.8 0 1 .4l.6 1.4c.2.3 0 .7-.2 1l-.7.6c-.3.3-.4.7-.4 1.1Z" />
   </Icon>
 );
+
+export const IconMail = (p: IconProps) => (
+  <Icon {...p}>
+    <rect x="3" y="5" width="18" height="14" rx="2" />
+    <path d="M3 7l9 6 9-6" />
+  </Icon>
+);
+
+export const IconAndroid = (p: IconProps) => (
+  <Icon {...p}>
+    <path d="M5 18V11a7 7 0 0 1 14 0v7" />
+    <path d="M2 18h20" />
+    <path d="M8 7l-1.5-2.5M16 7l1.5-2.5" />
+    <circle cx="9" cy="14" r="0.6" fill="currentColor" />
+    <circle cx="15" cy="14" r="0.6" fill="currentColor" />
+  </Icon>
+);

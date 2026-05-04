@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { LINKS, WA_URL } from "@/lib/constants";
+import { LINKS, SALES_EMAIL_URL } from "@/lib/constants";
 import { Download, ExternalLink } from "lucide-react";
 
 export function Nav() {
@@ -25,12 +25,7 @@ export function Nav() {
           </a>
         </div>
         <div className="nav-cta">
-          <a
-            className="btn btn-ghost btn-sm nav-cta-secondary"
-            href={WA_URL}
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a className="btn btn-ghost btn-sm nav-cta-secondary" href={SALES_EMAIL_URL}>
             Contact Sales
           </a>
           <a

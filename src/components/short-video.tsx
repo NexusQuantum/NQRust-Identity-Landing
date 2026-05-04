@@ -29,20 +29,54 @@ export function ShortVideo({
   const ref = useRef<HTMLVideoElement>(null);
   const isAvailable = VIDEOS_AVAILABLE[src] === true;
 
-  // Some mobile browsers (Safari iOS, Chrome Android with data-saver) skip autoplay
-  // until the source is forced to load. Kick playback explicitly after mount.
+  // Mobile browsers (Safari iOS, Chrome Android) routinely skip autoplay on nested
+  // <video> elements. Force load + retry playback when element becomes visible
+  // (after layout settles, after intersection-observer fires, on user-tap fallback).
   useEffect(() => {
     if (!isAvailable || !autoplay) return;
     const v = ref.current;
     if (!v) return;
+
     const tryPlay = () => {
-      v.play().catch(() => {
-        /* autoplay blocked — poster stays visible, that's fine */
-      });
+      // Always re-issue load() — some browsers garbage-collect <source> when
+      // element is initially off-screen.
+      try {
+        v.load();
+      } catch {
+        /* ignore */
+      }
+      const p = v.play();
+      if (p && typeof p.catch === "function") {
+        p.catch(() => {
+          /* autoplay blocked — poster stays visible until user taps */
+        });
+      }
     };
-    if (v.readyState >= 2) tryPlay();
-    else v.addEventListener("loadedmetadata", tryPlay, { once: true });
-    return () => v.removeEventListener("loadedmetadata", tryPlay);
+
+    // Try immediately
+    tryPlay();
+
+    // Try again when video data is ready
+    const onCanPlay = () => tryPlay();
+    v.addEventListener("loadedmetadata", onCanPlay);
+    v.addEventListener("canplay", onCanPlay);
+
+    // Try when element scrolls into view (mobile browsers throttle off-screen video)
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting && v.paused) tryPlay();
+        });
+      },
+      { threshold: 0.1 },
+    );
+    io.observe(v);
+
+    return () => {
+      v.removeEventListener("loadedmetadata", onCanPlay);
+      v.removeEventListener("canplay", onCanPlay);
+      io.disconnect();
+    };
   }, [isAvailable, autoplay, src]);
 
   return (

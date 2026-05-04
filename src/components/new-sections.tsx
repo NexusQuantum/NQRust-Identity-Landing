@@ -4,8 +4,8 @@ import Image from "next/image";
 import { ShortVideo } from "./short-video";
 import { ArchDiagram } from "./arch-diagram";
 import { Check, Download, Key, ShieldCheck, Smartphone, Terminal } from "lucide-react";
-import { IconWhatsApp } from "./icons";
-import { DOWNLOADS, WA_URL } from "@/lib/constants";
+import { IconAndroid, IconMail } from "./icons";
+import { DOWNLOADS, LINKS, SALES_EMAIL_URL } from "@/lib/constants";
 
 /* ───────────────────────────────────────────
    1. Trust Bar — BIN
@@ -308,6 +308,7 @@ export function UspMobile() {
                 </div>
               ))}
             </div>
+
           </div>
 
           <div className="phone-frame">
@@ -455,20 +456,23 @@ export function UspIndonesia() {
           <div className="usp-text" data-reveal="">
             <span className="eyebrow">
               <span className="dot" />
-              USP #4 · 🇮🇩 Local
+              USP #4 · 🇮🇩 Made in Indonesia
             </span>
-            <h2>Made in Indonesia. 100% TKDN.</h2>
+            <h2>Made in Indonesia. PDN & TKDN Compliant.</h2>
             <p>
-              Built by an Indonesian engineering team. Fully TKDN-compliant, ready for government
-              and SOE procurement, and aligned with national data sovereignty policy.
+              Built by an Indonesian engineering team. Registered as{" "}
+              <strong>PDN (Produk Dalam Negeri)</strong> with 100% TKDN — ready for government
+              and SOE procurement under <em>Presidential Instruction 2/2022</em> and national
+              data sovereignty policy.
             </p>
 
             <div className="usp-bullets">
               {[
-                "100% TKDN — eligible for government & SOE procurement",
-                "Local support team in Bahasa Indonesia, Indonesia time zone",
+                "PDN-classified — registered as Produk Dalam Negeri",
+                "100% TKDN certified — eligible for government & SOE procurement",
+                "Aligned with Presidential Instruction 2/2022 on local-product priority",
+                "Local support team — same time zone, native-language assistance",
                 "Full data residency under Indonesian jurisdiction",
-                "Aligned with national data sovereignty policy",
                 "Roadmap influenced directly by local customers",
               ].map((b) => (
                 <div className="usp-bullet" key={b}>
@@ -485,19 +489,18 @@ export function UspIndonesia() {
             <div className="tkdn-card-glow" aria-hidden="true" />
             <Image
               src="/assets/tkdn.png"
-              alt="Sertifikat TKDN — Tingkat Komponen Dalam Negeri"
+              alt="PDN registration & TKDN 100% certificate"
               width={320}
               height={320}
               className="tkdn-img"
             />
-            <div className="tkdn-eyebrow">Sertifikat TKDN · 100%</div>
-            <div className="tkdn-headline">
-              Identity you control — not rented from abroad.
-            </div>
+            <div className="tkdn-eyebrow">PDN · TKDN 100% Certified</div>
+            <div className="tkdn-headline">Identity you control — not rented from abroad.</div>
             <div className="tkdn-badges">
+              <span className="badge badge-orange">PDN-classified</span>
+              <span className="badge badge-orange">TKDN 100%</span>
               <span className="badge badge-orange">Government-ready</span>
               <span className="badge badge-orange">BUMN-ready</span>
-              <span className="badge badge-orange">Local support</span>
             </div>
           </div>
         </div>
@@ -579,6 +582,7 @@ export function SecurityOverview() {
 export function Comparison() {
   const rows: [string, string, string][] = [
     ["Data location", "Foreign servers", "Your servers, in Indonesia"],
+    ["PDN classification", "—", "Produk Dalam Negeri"],
     ["TKDN compliance", "—", "100%"],
     ["Airgapped mode", "Not available", "Built-in"],
     ["Mobile authenticator", "Third-party app", "First-party (NQRust Auth)"],
@@ -631,39 +635,39 @@ export function Comparison() {
 }
 
 /* ───────────────────────────────────────────
-   10. Use Cases (6 industries)
+   10. Built For (use cases by industry)
    ─────────────────────────────────────────── */
 export function UseCases() {
   const items = [
     {
       icon: "🏛️",
       title: "Government & SOE",
-      body: "SSO for internal applications. Aligned with TKDN and data sovereignty policy.",
+      body: "SSO for internal apps across ministries, regional governments, and SOEs. PDN/TKDN-eligible for procurement.",
     },
     {
       icon: "🏦",
       title: "Banking & Fintech",
-      body: "On-premise identity stack matching financial sector regulation and data residency.",
+      body: "On-premise identity that meets OJK data residency and audit requirements. Predictable annual licensing in IDR.",
     },
     {
       icon: "🛡️",
       title: "Defense & Intelligence",
-      body: "Airgapped deployment with zero outbound calls in fully isolated environments.",
+      body: "Airgapped deployment with zero outbound traffic. TOTP-based MFA without third-party authenticator dependencies.",
     },
     {
       icon: "🏥",
       title: "Healthcare",
-      body: "Patient data protection with encrypted storage and full audit trail.",
+      body: "Role-based access for clinical staff, event logging for patient-record access, encrypted credential storage.",
     },
     {
       icon: "🏭",
-      title: "Manufacturing & OT",
-      body: "Identity for operational systems isolated from the corporate network.",
+      title: "Industrial & OT",
+      body: "Identity layer for operational technology networks isolated from corporate IT — no internet dependency required.",
     },
     {
       icon: "🎓",
       title: "Education & Research",
-      body: "SSO for thousands of student and faculty accounts with predictable, low TCO.",
+      body: "Centralized SSO for thousands of student and faculty accounts. Self-hosted, low TCO, no per-user pricing.",
     },
   ];
   return (
@@ -672,12 +676,12 @@ export function UseCases() {
         <div className="section-head" data-reveal="">
           <span className="eyebrow">
             <span className="dot" />
-            Use cases
+            Built for
           </span>
-          <h2>Built for sectors that take identity seriously.</h2>
+          <h2>Where NQRust Identity fits.</h2>
           <p>
-            From government to OT — NQRust adapts to environments where control and compliance are
-            non-negotiable.
+            Designed for sectors with strict control, compliance, and sovereignty requirements
+            — not generic SaaS workflows.
           </p>
         </div>
 
@@ -778,12 +782,51 @@ export function FinalCta() {
                 justifyContent: "center",
               }}
             >
-              <IconWhatsApp size={26} stroke={1.8} />
+              <IconAndroid size={26} stroke={1.8} />
+            </div>
+            <h3>Get NQRust Auth</h3>
+            <p>
+              First-party 2FA app for Android. Offline-first TOTP/HOTP, encrypted local backup,
+              PIN app lock. Free, no account required.
+            </p>
+            <div className="dl-badges">
+              <span className="badge badge-green">Free</span>
+              <span className="badge badge-gray">Android 8.0+ · ~25 MB</span>
+            </div>
+            <div className="actions">
+              <a
+                className="btn btn-secondary btn-lg"
+                href={DOWNLOADS.apk.url}
+                target="_blank"
+                rel="noreferrer"
+                download
+              >
+                <Download size={16} strokeWidth={2} />
+                Download APK
+              </a>
+            </div>
+          </div>
+
+          <div className="final-cta-card secondary">
+            <div
+              style={{
+                width: 56,
+                height: 56,
+                borderRadius: 12,
+                background: "var(--color-surface-2)",
+                color: "var(--color-text)",
+                border: "1px solid var(--color-border)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <IconMail size={26} stroke={1.8} />
             </div>
             <h3>Contact Sales</h3>
             <p>
               For live demos, POC engagements, custom licensing, or government/SOE procurement
-              discussions — reach our local team directly.
+              discussions — reach our team directly.
             </p>
             <div
               style={{
@@ -792,17 +835,12 @@ export function FinalCta() {
                 color: "var(--color-text-muted)",
               }}
             >
-              +62 851-5512-1460
+              {LINKS.salesEmail}
             </div>
             <div className="actions">
-              <a
-                className="btn btn-secondary btn-lg"
-                href={WA_URL}
-                target="_blank"
-                rel="noreferrer"
-              >
-                <IconWhatsApp size={16} stroke={2} />
-                WhatsApp Sales
+              <a className="btn btn-secondary btn-lg" href={SALES_EMAIL_URL}>
+                <IconMail size={16} stroke={2} />
+                Email Sales
               </a>
             </div>
           </div>

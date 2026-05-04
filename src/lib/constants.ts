@@ -21,7 +21,7 @@ export const DOWNLOADS = {
 export const LINKS = {
   docs: "https://nq-rust-identity-docs.vercel.app/",
   github: "https://github.com/NexusQuantum",
-  salesWa: "6285155121460",
+  salesEmail: "contact@nexusquantum.id",
 };
 
 /**
@@ -37,8 +37,17 @@ export const VIDEOS_AVAILABLE: Record<string, boolean> = {
   "v5-arch-animated": false,
 };
 
-export const WA_URL =
-  "https://wa.me/6285155121460?text=" +
+/**
+ * Pre-filled mailto link for sales inquiries. Subject + body templated;
+ * customer's email client opens with the draft ready to send.
+ */
+export const SALES_EMAIL_URL =
+  `mailto:${LINKS.salesEmail}?subject=` +
+  encodeURIComponent("NQRust Identity — Sales Inquiry") +
+  "&body=" +
   encodeURIComponent(
-    "Hi NQRust, I'm interested in NQRust Identity and would like to ask about licensing.\n\nName: \nCompany: \nEstimated users: \nInterest: [ ] Trial extension  [ ] Production license  [ ] Airgapped consultation  [ ] Other\n\nPlease share package and pricing info. Thank you.",
+    "Hi NQRust team,\n\nI'm interested in NQRust Identity and would like to discuss licensing.\n\nName: \nCompany: \nEstimated users: \nInterest: [ ] Trial extension  [ ] Production license  [ ] Airgapped consultation  [ ] Other\n\nPlease share package and pricing info.\n\nThank you.",
   );
+
+/** Backward compatibility alias — components still importing WA_URL will get the email link instead. */
+export const WA_URL = SALES_EMAIL_URL;

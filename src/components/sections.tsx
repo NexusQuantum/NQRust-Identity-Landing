@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { DOWNLOADS, LINKS, WA_URL } from "@/lib/constants";
+import { DOWNLOADS, LINKS, SALES_EMAIL_URL } from "@/lib/constants";
 import { ArchDiagram } from "./arch-diagram";
 import { HeroVideoPlayer, TRACKS } from "./hero-video-player";
 import {
@@ -20,7 +20,7 @@ import {
   SquareStack,
   Terminal,
 } from "lucide-react";
-import { IconGitHub, IconWhatsApp } from "./icons";
+import { IconGitHub, IconMail } from "./icons";
 
 export function Hero() {
   const [activeIdx, setActiveIdx] = useState(0);
@@ -338,8 +338,8 @@ export function Downloads() {
                 <Download size={15} strokeWidth={2} />
                 Download Installer
               </a>
-              <a className="btn btn-secondary" href={WA_URL} target="_blank" rel="noreferrer">
-                <IconWhatsApp size={15} stroke={2} />
+              <a className="btn btn-secondary" href={SALES_EMAIL_URL}>
+                <IconMail size={15} stroke={2} />
                 Contact Sales
               </a>
             </div>
@@ -437,7 +437,7 @@ export function FAQ() {
     },
     {
       q: "How does license renewal work?",
-      a: "30 days before the trial ends, the admin portal shows a reminder. Reach out to sales via WhatsApp to request a quotation. After payment, you'll receive a new license key — just paste it into the portal, no redeployment required.",
+      a: "30 days before the trial ends, the admin portal shows a reminder. Email sales at contact@nexusquantum.id to request a quotation. After payment, you'll receive a new license key — just paste it into the portal, no redeployment required.",
     },
     {
       q: "Is support / SLA available?",
@@ -513,9 +513,7 @@ export function Footer() {
           </div>
           <div className="footer-col">
             <h4>Company</h4>
-            <a href={WA_URL} target="_blank" rel="noreferrer">
-              Contact Sales
-            </a>
+            <a href={SALES_EMAIL_URL}>Contact Sales</a>
             <a href="#">Privacy</a>
             <a href="#">Terms</a>
           </div>
@@ -531,8 +529,8 @@ export function Footer() {
             >
               <IconGitHub size={18} stroke={1.6} />
             </a>
-            <a href={WA_URL} target="_blank" rel="noreferrer" style={{ display: "inline-flex" }}>
-              <IconWhatsApp size={18} stroke={1.6} />
+            <a href={SALES_EMAIL_URL} style={{ display: "inline-flex" }} aria-label="Email sales">
+              <IconMail size={18} stroke={1.6} />
             </a>
           </span>
         </div>

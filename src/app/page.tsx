@@ -12,7 +12,6 @@ import {
   Problem,
   SecurityOverview,
   Solution,
-  TrustBar,
   UseCases,
   UspAirgapped,
   UspIndonesia,
@@ -50,10 +49,7 @@ export default function HomePage() {
         {/* 1. Hero with V0 video loop */}
         <Hero />
 
-        {/* 2. Trust Bar — BIN */}
-        <TrustBar />
-
-        {/* 3. Problem — 5 pain points */}
+        {/* 2. Problem — pain points */}
         <Problem />
 
         {/* 4. Solution 4-in-One (V1 video) */}
@@ -80,7 +76,7 @@ export default function HomePage() {
         {/* 11. Comparison vs Cloud IAM */}
         <Comparison />
 
-        {/* 12. Use Cases (6 industries) */}
+        {/* 12. Built For — use cases by industry */}
         <UseCases />
 
         {/* 13. FAQ */}
