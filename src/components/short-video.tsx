@@ -1,12 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { VIDEOS_AVAILABLE } from "@/lib/constants";
 
 interface ShortVideoProps {
   /** Base name without extension. e.g. "v1-stack-overview" → loads /videos/v1-stack-overview.{mp4,webm} */
   src: string;
-  /** Aspect ratio for the wrapper (CSS aspect-ratio value). Examples: "16/9", "9/16", "1268/2756" */
+  /** Aspect ratio for the wrapper (CSS aspect-ratio value). Examples: "16/9", "9/16", "720/1564" */
   aspectRatio?: string;
   /** Whether to autoplay (loop, muted) — default true */
   autoplay?: boolean;
@@ -27,24 +27,16 @@ export function ShortVideo({
   objectFit = "cover",
 }: ShortVideoProps) {
   const ref = useRef<HTMLVideoElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const isAvailable = VIDEOS_AVAILABLE[src] === true;
+  const [hasError, setHasError] = useState(false);
 
-  // Mobile browsers (Safari iOS, Chrome Android) routinely skip autoplay on nested
-  // <video> elements. Force load + retry playback when element becomes visible
-  // (after layout settles, after intersection-observer fires, on user-tap fallback).
   useEffect(() => {
     if (!isAvailable || !autoplay) return;
     const v = ref.current;
     if (!v) return;
 
     const tryPlay = () => {
-      // Always re-issue load() — some browsers garbage-collect <source> when
-      // element is initially off-screen.
-      try {
-        v.load();
-      } catch {
-        /* ignore */
-      }
       const p = v.play();
       if (p && typeof p.catch === "function") {
         p.catch(() => {
@@ -53,15 +45,19 @@ export function ShortVideo({
       }
     };
 
-    // Try immediately
-    tryPlay();
-
-    // Try again when video data is ready
+    // Try when video data is ready (most reliable)
     const onCanPlay = () => tryPlay();
-    v.addEventListener("loadedmetadata", onCanPlay);
     v.addEventListener("canplay", onCanPlay);
+    v.addEventListener("loadeddata", onCanPlay);
 
-    // Try when element scrolls into view (mobile browsers throttle off-screen video)
+    // Force load explicitly — some browsers don't auto-fetch nested videos
+    try {
+      v.load();
+    } catch {
+      /* ignore */
+    }
+
+    // Try when scrolled into view
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -70,17 +66,18 @@ export function ShortVideo({
       },
       { threshold: 0.1 },
     );
-    io.observe(v);
+    if (wrapperRef.current) io.observe(wrapperRef.current);
 
     return () => {
-      v.removeEventListener("loadedmetadata", onCanPlay);
       v.removeEventListener("canplay", onCanPlay);
+      v.removeEventListener("loadeddata", onCanPlay);
       io.disconnect();
     };
   }, [isAvailable, autoplay, src]);
 
   return (
     <div
+      ref={wrapperRef}
       className={className}
       style={{
         position: "relative",
@@ -89,11 +86,11 @@ export function ShortVideo({
         borderRadius: "var(--radius-lg)",
         overflow: "hidden",
         border: "1px solid var(--color-border)",
-        background: "var(--color-surface-2)",
+        background: "#0B0B0F",
         boxShadow: "var(--shadow-md)",
       }}
     >
-      {isAvailable ? (
+      {isAvailable && !hasError ? (
         <video
           ref={ref}
           autoPlay={autoplay}
@@ -102,7 +99,18 @@ export function ShortVideo({
           playsInline
           preload="auto"
           poster={`/videos/${src}.jpg`}
-          style={{ width: "100%", height: "100%", objectFit, display: "block" }}
+          onError={(e) => {
+            console.error(`Video load error for ${src}:`, e);
+            setHasError(true);
+          }}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit,
+            display: "block",
+            position: "absolute",
+            inset: 0,
+          }}
         >
           <source src={`/videos/${src}.webm`} type="video/webm" />
         </video>

@@ -314,7 +314,7 @@ export function UspMobile() {
           <div className="phone-frame">
             <ShortVideo
               src="v2-mobile-auth"
-              aspectRatio="1268/2756"
+              aspectRatio="720/1564"
               objectFit="cover"
               caption="NQRust Auth"
             />
