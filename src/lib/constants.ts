@@ -19,7 +19,7 @@ export const DOWNLOADS = {
 };
 
 export const LINKS = {
-  docs: "https://nq-rust-identity-docs.vercel.app/",
+  docs: "https://docs-identity.nexusquantum.id/",
   github: "https://github.com/NexusQuantum",
   salesEmail: "contact@nexusquantum.id",
 };
